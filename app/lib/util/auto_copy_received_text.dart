@@ -1,5 +1,6 @@
 typedef ClipboardWriter = Future<void> Function(String text);
 typedef ClipboardErrorHandler = void Function(Object error, StackTrace stackTrace);
+typedef CopiedNotice = void Function();
 
 bool shouldAutoCopyReceivedText({
   required String? message,
@@ -18,6 +19,7 @@ Future<void> copyReceivedTextIfAllowed({
   required bool isAuthenticated,
   required ClipboardWriter writeClipboard,
   required ClipboardErrorHandler onClipboardError,
+  CopiedNotice? onCopied,
 }) async {
   if (!accepted ||
       !shouldAutoCopyReceivedText(
@@ -32,6 +34,7 @@ Future<void> copyReceivedTextIfAllowed({
 
   try {
     await writeClipboard(message!);
+    onCopied?.call();
   } catch (error, stackTrace) {
     onClipboardError(error, stackTrace);
   }

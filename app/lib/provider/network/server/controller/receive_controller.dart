@@ -21,6 +21,7 @@ import 'package:localsend_app/provider/security_provider.dart';
 import 'package:localsend_app/provider/selection/selected_receiving_files_provider.dart';
 import 'package:localsend_app/provider/selection/selected_sending_files_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
+import 'package:localsend_app/util/auto_copy_notice.dart';
 import 'package:localsend_app/util/auto_copy_received_text.dart';
 import 'package:localsend_app/util/native/directories.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
@@ -158,10 +159,6 @@ class ReceiveController {
       return;
     }
 
-    if (checkPlatformHasTray() && (await windowManager.isMinimized() || !(await windowManager.isVisible()) || !(await windowManager.isFocused()))) {
-      await showFromTray();
-    }
-
     final message = server.getState().session?.message;
     if (message != null) {
       // Message already received
@@ -192,6 +189,10 @@ class ReceiveController {
       // Automatically accept eligible text messages so the user does not need to press Copy or Close.
       await acceptFileRequest({});
       return;
+    }
+
+    if (checkPlatformHasTray() && (await windowManager.isMinimized() || !(await windowManager.isVisible()) || !(await windowManager.isFocused()))) {
+      await showFromTray();
     }
 
     final receiveProvider = ViewProvider((ref) {
@@ -558,6 +559,7 @@ class ReceiveController {
         onClipboardError: (error, stackTrace) {
           _logger.warning('Could not copy received text to the clipboard', error, stackTrace);
         },
+        onCopied: showAutoCopyNotice,
       );
       closeSession();
       return;

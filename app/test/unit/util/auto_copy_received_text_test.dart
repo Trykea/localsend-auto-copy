@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 void main() {
   test('copies accepted text from an authenticated favorite desktop sender', () async {
     String? copiedText;
+    var noticeCount = 0;
 
     await copyReceivedTextIfAllowed(
       message: 'hello',
@@ -13,10 +14,12 @@ void main() {
       isFavorite: true,
       isAuthenticated: true,
       writeClipboard: (text) async => copiedText = text,
+      onCopied: () => noticeCount++,
       onClipboardError: (_, _) {},
     );
 
     expect(copiedText, 'hello');
+    expect(noticeCount, 1);
   });
 
   test('eligible text is allowed to auto-accept without a Copy button interaction', () {
