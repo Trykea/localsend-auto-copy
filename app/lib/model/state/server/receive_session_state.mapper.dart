@@ -39,6 +39,10 @@ class ReceiveSessionStateMapper extends ClassMapperBase<ReceiveSessionState> {
     'sender',
     _$sender,
   );
+  static bool _$senderIsAuthenticated(ReceiveSessionState v) =>
+      v.senderIsAuthenticated;
+  static const Field<ReceiveSessionState, bool> _f$senderIsAuthenticated =
+      Field('senderIsAuthenticated', _$senderIsAuthenticated);
   static String _$senderAlias(ReceiveSessionState v) => v.senderAlias;
   static const Field<ReceiveSessionState, String> _f$senderAlias = Field(
     'senderAlias',
@@ -81,6 +85,7 @@ class ReceiveSessionStateMapper extends ClassMapperBase<ReceiveSessionState> {
     #sessionId: _f$sessionId,
     #status: _f$status,
     #sender: _f$sender,
+    #senderIsAuthenticated: _f$senderIsAuthenticated,
     #senderAlias: _f$senderAlias,
     #files: _f$files,
     #startTime: _f$startTime,
@@ -96,6 +101,7 @@ class ReceiveSessionStateMapper extends ClassMapperBase<ReceiveSessionState> {
       sessionId: data.dec(_f$sessionId),
       status: data.dec(_f$status),
       sender: data.dec(_f$sender),
+      senderIsAuthenticated: data.dec(_f$senderIsAuthenticated),
       senderAlias: data.dec(_f$senderAlias),
       files: data.dec(_f$files),
       startTime: data.dec(_f$startTime),
@@ -189,6 +195,7 @@ abstract class ReceiveSessionStateCopyWith<
     String? sessionId,
     SessionStatus? status,
     Device? sender,
+    bool? senderIsAuthenticated,
     String? senderAlias,
     Map<String, ReceivingFile>? files,
     int? startTime,
@@ -231,6 +238,7 @@ class _ReceiveSessionStateCopyWithImpl<$R, $Out>
     String? sessionId,
     SessionStatus? status,
     Device? sender,
+    bool? senderIsAuthenticated,
     String? senderAlias,
     Map<String, ReceivingFile>? files,
     Object? startTime = $none,
@@ -244,6 +252,8 @@ class _ReceiveSessionStateCopyWithImpl<$R, $Out>
       if (sessionId != null) #sessionId: sessionId,
       if (status != null) #status: status,
       if (sender != null) #sender: sender,
+      if (senderIsAuthenticated != null)
+        #senderIsAuthenticated: senderIsAuthenticated,
       if (senderAlias != null) #senderAlias: senderAlias,
       if (files != null) #files: files,
       if (startTime != $none) #startTime: startTime,
@@ -260,6 +270,10 @@ class _ReceiveSessionStateCopyWithImpl<$R, $Out>
     sessionId: data.get(#sessionId, or: $value.sessionId),
     status: data.get(#status, or: $value.status),
     sender: data.get(#sender, or: $value.sender),
+    senderIsAuthenticated: data.get(
+      #senderIsAuthenticated,
+      or: $value.senderIsAuthenticated,
+    ),
     senderAlias: data.get(#senderAlias, or: $value.senderAlias),
     files: data.get(#files, or: $value.files),
     startTime: data.get(#startTime, or: $value.startTime),

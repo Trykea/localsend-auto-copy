@@ -516,6 +516,24 @@ class MockPersistenceService extends _i1.Mock implements _i4.PersistenceService 
           as _i5.Future<void>);
 
   @override
+  bool isAutoCopyReceivedText() =>
+      (super.noSuchMethod(
+            Invocation.method(#isAutoCopyReceivedText, []),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  _i5.Future<void> setAutoCopyReceivedText(bool? autoCopyReceivedText) =>
+      (super.noSuchMethod(
+            Invocation.method(#setAutoCopyReceivedText, [autoCopyReceivedText]),
+            returnValue: _i5.Future<void>.value(),
+            returnValueForMissingStub: _i5.Future<void>.value(),
+          )
+          as _i5.Future<void>);
+
+  @override
   bool isMinimizeToTray() =>
       (super.noSuchMethod(
             Invocation.method(#isMinimizeToTray, []),

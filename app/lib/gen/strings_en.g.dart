@@ -1121,6 +1121,9 @@ class Translations$settingsTab$receive$en {
   /// en: 'Auto Finish'
   String get autoFinish => 'Auto Finish';
 
+  /// en: 'Automatically copy received text from favorite devices'
+  String get autoCopyReceivedText => 'Automatically copy received text from favorite devices';
+
   /// en: 'Save to folder'
   String get destination => 'Save to folder';
 

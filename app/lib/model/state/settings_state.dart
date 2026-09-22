@@ -26,6 +26,7 @@ class SettingsState with SettingsStateMappable {
   final bool quickSaveFromFavorites; // automatically accept file requests from favorites
   final String? receivePin; // null = disabled
   final bool autoFinish; // automatically finish sessions
+  final bool autoCopyReceivedText; // automatically copy received text from favorite devices
   final bool minimizeToTray; // minimize to tray instead of exiting the app
   final bool https;
   final SendMode sendMode;
@@ -58,6 +59,7 @@ class SettingsState with SettingsStateMappable {
     required this.quickSaveFromFavorites,
     required this.receivePin,
     required this.autoFinish,
+    required this.autoCopyReceivedText,
     required this.minimizeToTray,
     required this.https,
     required this.sendMode,

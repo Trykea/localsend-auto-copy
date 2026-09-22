@@ -21,6 +21,9 @@ class ReceiveSessionState with ReceiveSessionStateMappable implements SessionSta
 
   final Device sender;
 
+  /// True only when the sender identity came from the TLS client certificate.
+  final bool senderIsAuthenticated;
+
   // Might not be the same as sender.alias since it can be overridden as a favorite
   final String senderAlias;
 
@@ -45,6 +48,7 @@ class ReceiveSessionState with ReceiveSessionStateMappable implements SessionSta
     required this.sessionId,
     required this.status,
     required this.sender,
+    required this.senderIsAuthenticated,
     required this.senderAlias,
     required this.files,
     required this.startTime,

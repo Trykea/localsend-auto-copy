@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:localsend_app/model/state/server/receive_session_state.dart';
 import 'package:localsend_app/model/state/server/receiving_file.dart';
 import 'package:localsend_app/pages/home_page.dart';
@@ -22,6 +21,7 @@ import 'package:localsend_app/provider/security_provider.dart';
 import 'package:localsend_app/provider/selection/selected_receiving_files_provider.dart';
 import 'package:localsend_app/provider/selection/selected_sending_files_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
+import 'package:localsend_app/util/auto_copy_received_text.dart';
 import 'package:localsend_app/util/native/directories.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
 import 'package:localsend_app/util/native/tray_helper.dart';
@@ -97,6 +97,7 @@ class ReceiveController {
           sessionId: sessionId,
           status: SessionStatus.waiting,
           sender: event.info.toDevice(event.ip, withChannel: false).copyWith(fingerprint: senderFingerprint),
+          senderIsAuthenticated: event.certFingerprint != null,
           senderAlias: server.ref.read(favoritesProvider).firstWhereOrNull((e) => e.fingerprint == senderFingerprint)?.alias ?? event.info.alias,
           files: {
             for (final file in files.values)
@@ -179,6 +180,18 @@ class ReceiveController {
               timestamp: DateTime.now().toUtc(),
             ),
           );
+    }
+
+    if (shouldAutoCopyReceivedText(
+      message: message,
+      enabled: settings.autoCopyReceivedText,
+      isDesktop: checkPlatformIsDesktop(),
+      isFavorite: server.ref.read(favoritesProvider).any((e) => e.fingerprint == senderFingerprint),
+      isAuthenticated: event.certFingerprint != null,
+    )) {
+      // Automatically accept eligible text messages so the user does not need to press Copy or Close.
+      await acceptFileRequest({});
+      return;
     }
 
     final receiveProvider = ViewProvider((ref) {
@@ -533,6 +546,19 @@ class ReceiveController {
       // nothing selected, the Rust server responds with 204 and creates no session
       // This usually happens for message transfers
       server.ref.redux(parentIsolateProvider).dispatch(IsolateHttpServerPrepareUploadDecisionAction(config: _buildReceiveConfig(session, {})));
+      final settings = server.ref.read(settingsProvider);
+      await copyReceivedTextIfAllowed(
+        message: session.message,
+        accepted: true,
+        enabled: settings.autoCopyReceivedText,
+        isDesktop: checkPlatformIsDesktop(),
+        isFavorite: server.ref.read(favoritesProvider).any((e) => e.fingerprint == session.sender.fingerprint),
+        isAuthenticated: session.senderIsAuthenticated,
+        writeClipboard: (text) => Clipboard.setData(ClipboardData(text: text)),
+        onClipboardError: (error, stackTrace) {
+          _logger.warning('Could not copy received text to the clipboard', error, stackTrace);
+        },
+      );
       closeSession();
       return;
     }

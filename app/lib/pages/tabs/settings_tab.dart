@@ -252,6 +252,14 @@ class SettingsTab extends StatelessWidget {
                     await ref.notifier(settingsProvider).setAutoFinish(b);
                   },
                 ),
+                if (checkPlatformIsDesktop())
+                  _BooleanEntry(
+                    label: t.settingsTab.receive.autoCopyReceivedText,
+                    value: vm.settings.autoCopyReceivedText,
+                    onChanged: (b) async {
+                      await ref.notifier(settingsProvider).setAutoCopyReceivedText(b);
+                    },
+                  ),
                 _BooleanEntry(
                   label: t.settingsTab.receive.saveToHistory,
                   value: vm.settings.saveToHistory,
