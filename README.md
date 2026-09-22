@@ -1,5 +1,14 @@
 # LocalSend
 
+> **Unofficial community fork — LocalSend Auto Copy**
+>
+> This repository is an independent side project based on [LocalSend](https://github.com/localsend/localsend). It is not created, maintained, endorsed, or officially distributed by the LocalSend project or its maintainers.
+
+[![Upstream project](https://img.shields.io/badge/upstream-LocalSend-blue)](https://github.com/localsend/localsend)
+[![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+
+This fork adds an opt-in Windows desktop workflow that automatically accepts and copies eligible media received from favorite devices. See [Fork features](#fork-features) below.
+
 [![CI status][ci-badge]][ci-workflow]
 [![Translations][translate-badge]][translate-link]
 [![Packaging status][packaging-badge]][packaging-link]
@@ -21,6 +30,23 @@
 [codeberg]: https://codeberg.org/localsend/localsend
 
 LocalSend is a free, open-source app that allows you to securely share files and messages with nearby devices over your local network without needing an internet connection.
+
+## Fork features
+
+This fork currently adds:
+
+- Opt-in automatic copying of received text from favorite devices.
+- Opt-in automatic acceptance and clipboard copying of received media on desktop platforms.
+- Safety limits for automatic media copying: 50 MB per image, 250 MB per non-image file, and 500 MB per transfer batch.
+- A compact desktop confirmation notification after automatic copying.
+
+These changes are intentionally separate from LocalSend's default behavior and remain disabled unless enabled in Settings.
+
+## Relationship to LocalSend
+
+LocalSend is the upstream project. This repository is maintained independently for experimentation and personal use. For the official application, downloads, documentation, issue tracker, and contribution process, use the [official LocalSend repository](https://github.com/localsend/localsend) and [localsend.org](https://localsend.org).
+
+The upstream source and license notices are preserved. This fork is distributed under the terms of the Apache License 2.0, with modifications documented in [NOTICE](NOTICE).
 
 - [About](#about)
 - [Sponsors](#sponsors)

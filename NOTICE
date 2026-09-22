@@ -1,0 +1,16 @@
+LocalSend Auto Copy
+===================
+
+This repository is an unofficial derivative work based on LocalSend:
+https://github.com/localsend/localsend
+
+LocalSend is Copyright 2022-2026 Tien Do Nam and contributors and is
+licensed under the Apache License, Version 2.0. The complete license text
+is included in LICENSE.
+
+This fork is not affiliated with, endorsed by, or officially maintained by
+the LocalSend project or its maintainers.
+
+Modifications in this fork include opt-in automatic copying of received text
+and eligible media from favorite devices, desktop confirmation notifications,
+and related settings, persistence, tests, and Windows integration.
