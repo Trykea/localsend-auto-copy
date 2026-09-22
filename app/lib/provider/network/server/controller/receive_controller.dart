@@ -22,6 +22,7 @@ import 'package:localsend_app/provider/selection/selected_receiving_files_provid
 import 'package:localsend_app/provider/selection/selected_sending_files_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
 import 'package:localsend_app/util/auto_copy_notice.dart';
+import 'package:localsend_app/util/auto_copy_received_media.dart';
 import 'package:localsend_app/util/auto_copy_received_text.dart';
 import 'package:localsend_app/util/native/directories.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
@@ -135,6 +136,23 @@ class ReceiveController {
       if (isFavorite) {
         quickSave = true;
       }
+    }
+
+    final autoCopyMediaFromFavorite =
+        settings.autoCopyReceivedMedia &&
+        server.getState().session?.message == null &&
+        shouldAutoCopyReceivedMedia(
+          files: files.values,
+          enabled: true,
+          isFavorite: server.ref.read(favoritesProvider).any((e) => e.fingerprint == senderFingerprint),
+          isDesktop: checkPlatformIsDesktop(),
+        );
+    if (autoCopyMediaFromFavorite) {
+      final firstType = files.values.first.fileType;
+      showAutoCopyNotice(
+        message: firstType == FileType.image ? 'Image accepting' : (firstType == FileType.video ? 'Video accepting' : 'File accepting'),
+      );
+      quickSave = true;
     }
     if (server.getState().webUpload && settings.receiveViaLinkAutoAccept && server.getState().session?.message == null) {
       // The upload page (receive via link) is being served and requests should be accepted automatically.
@@ -435,7 +453,28 @@ class ReceiveController {
           quickSave = true;
         }
       }
+      final autoCopyMedia =
+          settings.autoCopyReceivedMedia &&
+          !hasError &&
+          server.getState().session?.message == null &&
+          shouldAutoCopyReceivedMedia(
+            files: session.files.values.map((entry) => entry.file),
+            enabled: true,
+            isFavorite: server.ref.read(favoritesProvider).any((e) => e.fingerprint == session.sender.fingerprint),
+            isDesktop: checkPlatformIsDesktop(),
+          );
       if (quickSave) {
+        if (autoCopyMedia) {
+          final completedSession = server.getStateOrNull()?.session;
+          final paths = completedSession?.files.values.map((entry) => entry.path).whereType<String>().toList() ?? const <String>[];
+          final copied = paths.length == session.files.length && await copyReceivedMediaToClipboard(paths);
+          if (copied) {
+            final firstType = session.files.values.first.file.fileType;
+            showAutoCopyNotice(
+              message: firstType == FileType.image ? 'Image copied' : (firstType == FileType.video ? 'Video copied' : 'File copied'),
+            );
+          }
+        }
         // close the session **after** the response has been sent
         Future.delayed(Duration.zero, () {
           closeSession();

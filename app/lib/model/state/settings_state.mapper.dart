@@ -110,6 +110,12 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
     'autoCopyReceivedText',
     _$autoCopyReceivedText,
   );
+  static bool _$autoCopyReceivedMedia(SettingsState v) =>
+      v.autoCopyReceivedMedia;
+  static const Field<SettingsState, bool> _f$autoCopyReceivedMedia = Field(
+    'autoCopyReceivedMedia',
+    _$autoCopyReceivedMedia,
+  );
   static bool _$minimizeToTray(SettingsState v) => v.minimizeToTray;
   static const Field<SettingsState, bool> _f$minimizeToTray = Field(
     'minimizeToTray',
@@ -195,6 +201,7 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
     #receivePin: _f$receivePin,
     #autoFinish: _f$autoFinish,
     #autoCopyReceivedText: _f$autoCopyReceivedText,
+    #autoCopyReceivedMedia: _f$autoCopyReceivedMedia,
     #minimizeToTray: _f$minimizeToTray,
     #https: _f$https,
     #sendMode: _f$sendMode,
@@ -230,6 +237,7 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
       receivePin: data.dec(_f$receivePin),
       autoFinish: data.dec(_f$autoFinish),
       autoCopyReceivedText: data.dec(_f$autoCopyReceivedText),
+      autoCopyReceivedMedia: data.dec(_f$autoCopyReceivedMedia),
       minimizeToTray: data.dec(_f$minimizeToTray),
       https: data.dec(_f$https),
       sendMode: data.dec(_f$sendMode),
@@ -331,6 +339,7 @@ abstract class SettingsStateCopyWith<$R, $In extends SettingsState, $Out>
     String? receivePin,
     bool? autoFinish,
     bool? autoCopyReceivedText,
+    bool? autoCopyReceivedMedia,
     bool? minimizeToTray,
     bool? https,
     SendMode? sendMode,
@@ -394,6 +403,7 @@ class _SettingsStateCopyWithImpl<$R, $Out>
     Object? receivePin = $none,
     bool? autoFinish,
     bool? autoCopyReceivedText,
+    bool? autoCopyReceivedMedia,
     bool? minimizeToTray,
     bool? https,
     SendMode? sendMode,
@@ -429,6 +439,8 @@ class _SettingsStateCopyWithImpl<$R, $Out>
       if (autoFinish != null) #autoFinish: autoFinish,
       if (autoCopyReceivedText != null)
         #autoCopyReceivedText: autoCopyReceivedText,
+      if (autoCopyReceivedMedia != null)
+        #autoCopyReceivedMedia: autoCopyReceivedMedia,
       if (minimizeToTray != null) #minimizeToTray: minimizeToTray,
       if (https != null) #https: https,
       if (sendMode != null) #sendMode: sendMode,
@@ -472,6 +484,10 @@ class _SettingsStateCopyWithImpl<$R, $Out>
     autoCopyReceivedText: data.get(
       #autoCopyReceivedText,
       or: $value.autoCopyReceivedText,
+    ),
+    autoCopyReceivedMedia: data.get(
+      #autoCopyReceivedMedia,
+      or: $value.autoCopyReceivedMedia,
     ),
     minimizeToTray: data.get(#minimizeToTray, or: $value.minimizeToTray),
     https: data.get(#https, or: $value.https),

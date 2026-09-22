@@ -63,6 +63,7 @@ class SettingsService extends PureNotifier<SettingsState> {
     receivePin: _persistence.getReceivePin(),
     autoFinish: _persistence.isAutoFinish(),
     autoCopyReceivedText: _persistence.isAutoCopyReceivedText(),
+    autoCopyReceivedMedia: _persistence.isAutoCopyReceivedMedia(),
     minimizeToTray: _persistence.isMinimizeToTray(),
     https: _persistence.isHttps(),
     sendMode: _persistence.getSendMode(),
@@ -225,6 +226,11 @@ class SettingsService extends PureNotifier<SettingsState> {
     state = state.copyWith(
       autoCopyReceivedText: autoCopyReceivedText,
     );
+  }
+
+  Future<void> setAutoCopyReceivedMedia(bool enabled) async {
+    await _persistence.setAutoCopyReceivedMedia(enabled);
+    state = state.copyWith(autoCopyReceivedMedia: enabled);
   }
 
   Future<void> setMinimizeToTray(bool minimizeToTray) async {

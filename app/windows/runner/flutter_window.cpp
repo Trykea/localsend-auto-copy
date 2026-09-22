@@ -1,6 +1,7 @@
 #include "flutter_window.h"
 
 #include <optional>
+#include <string>
 
 #include "copy_notice.h"
 #include "flutter/generated_plugin_registrant.h"
@@ -37,7 +38,20 @@ bool FlutterWindow::OnCreate() {
       [this](const flutter::MethodCall<>& call,
              std::unique_ptr<flutter::MethodResult<>> result) {
         if (call.method_name() == "show") {
-          copy_notice::Show(GetHandle());
+          std::wstring message = L"Text copied";
+          if (call.arguments()) {
+            const auto* value = std::get_if<std::string>(call.arguments());
+            if (value != nullptr) {
+              const int length = MultiByteToWideChar(CP_UTF8, 0, value->c_str(),
+                                                     static_cast<int>(value->size()),
+                                                     nullptr, 0);
+              message.resize(length);
+              MultiByteToWideChar(CP_UTF8, 0, value->c_str(),
+                                  static_cast<int>(value->size()), message.data(),
+                                  length);
+            }
+          }
+          copy_notice::Show(GetHandle(), message);
           result->Success();
           return;
         }

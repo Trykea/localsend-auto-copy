@@ -12,7 +12,6 @@ using Microsoft::WRL::ComPtr;
 
 constexpr wchar_t kClassName[] = L"LocalSendAutoCopyNotice";
 constexpr wchar_t kWindowTitle[] = L"LocalSend notification";
-constexpr wchar_t kMessage[] = L"Text copied";
 constexpr UINT_PTR kHideTimer = 1;
 constexpr UINT kDisplayDurationMs = 2200;
 constexpr int kBaseWidth = 135;
@@ -75,7 +74,8 @@ void EnsureWindowClass(HINSTANCE instance) {
   registered = true;
 }
 
-bool RenderAndPresent(HWND window, int width, int height) {
+bool RenderAndPresent(HWND window, int width, int height,
+                      const std::wstring& message) {
   if (!EnsureRenderers()) return false;
 
   HDC screen_dc = GetDC(nullptr);
@@ -152,7 +152,7 @@ bool RenderAndPresent(HWND window, int width, int height) {
       static_cast<float>(width - Scale(8, dpi)),
                                      static_cast<float>(height));
   ComPtr<IDWriteTextLayout> layout;
-  g_write_factory->CreateTextLayout(kMessage, static_cast<UINT32>(wcslen(kMessage)),
+  g_write_factory->CreateTextLayout(message.c_str(), static_cast<UINT32>(message.size()),
                                     format.Get(), text_rect.right - text_rect.left,
                                     text_rect.bottom, layout.GetAddressOf());
   target->DrawTextLayout(D2D1::Point2F(text_rect.left, 0.0f), layout.Get(),
@@ -189,7 +189,7 @@ bool RenderAndPresent(HWND window, int width, int height) {
 
 namespace copy_notice {
 
-void Show(HWND owner) {
+void Show(HWND owner, const std::wstring& message) {
   HINSTANCE instance = GetModuleHandle(nullptr);
   EnsureWindowClass(instance);
   if (g_notice_window == nullptr) {
@@ -215,7 +215,7 @@ void Show(HWND owner) {
   const int y = work_area.bottom - height - bottom_margin;
   SetWindowPos(g_notice_window, HWND_TOPMOST, x, y, width, height,
                SWP_NOACTIVATE | SWP_SHOWWINDOW);
-  RenderAndPresent(g_notice_window, width, height);
+  RenderAndPresent(g_notice_window, width, height, message);
   SetTimer(g_notice_window, kHideTimer, kDisplayDurationMs, nullptr);
 }
 

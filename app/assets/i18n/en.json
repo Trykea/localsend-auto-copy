@@ -119,6 +119,7 @@
       "requirePin": "@:webSharePage.requirePin",
       "autoFinish": "Auto Finish",
       "autoCopyReceivedText": "Automatically copy received text from favorite devices",
+      "autoCopyReceivedMedia": "Automatically copy received media from favorite devices",
       "destination": "Save to folder",
       "downloads": "(Downloads)",
       "saveToGallery": "Save media to gallery",

@@ -84,6 +84,7 @@ const _quickSave = 'ls_quick_save'; // a QuickSaveMode; was a bool until storage
 const _receivePin = 'ls_receive_pin';
 const _autoFinish = 'ls_auto_finish';
 const _autoCopyReceivedText = 'ls_auto_copy_received_text';
+const _autoCopyReceivedMedia = 'ls_auto_copy_received_media';
 const _minimizeToTray = 'ls_minimize_to_tray';
 const _https = 'ls_https';
 const _sendMode = 'ls_send_mode';
@@ -489,6 +490,12 @@ class PersistenceService {
 
   Future<void> setAutoCopyReceivedText(bool autoCopyReceivedText) async {
     await _prefs.setBool(_autoCopyReceivedText, autoCopyReceivedText);
+  }
+
+  bool isAutoCopyReceivedMedia() => _prefs.getBool(_autoCopyReceivedMedia) ?? false;
+
+  Future<void> setAutoCopyReceivedMedia(bool enabled) async {
+    await _prefs.setBool(_autoCopyReceivedMedia, enabled);
   }
 
   bool isMinimizeToTray() {
